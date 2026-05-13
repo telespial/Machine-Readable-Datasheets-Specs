@@ -3,10 +3,7 @@
   "pins": [
     {
       "name": "PA10",
-      "functions": [
-        "GPIO",
-        "I2C_SDA"
-      ]
+      "functions": ["GPIO", "I2C_SDA"]
     }
   ],
   "registers": [
@@ -14,5 +11,92 @@
       "name": "GPIOA_MODER",
       "address": "0x40020000"
     }
-  ]
+  ],
+  "modelTargets": [
+    {
+      "id": "examplemcu123_lqfp",
+      "vendor": "ExampleVendor",
+      "family": "ExampleFamily",
+      "partNumber": "ExampleMCU123",
+      "package": "LQFP64",
+      "siliconRevisions": ["A0"]
+    }
+  ],
+  "modelFeatureSets": [
+    {
+      "id": "adaptive_reasoning_generic",
+      "name": "Adaptive Reasoning",
+      "category": "adaptive_reasoning",
+      "compatibleTargets": ["examplemcu123_lqfp"],
+      "pipeline": {
+        "stages": [
+          { "name": "input", "kind": "input" },
+          { "name": "normalize", "kind": "prep" },
+          { "name": "model", "kind": "inference" },
+          { "name": "post", "kind": "post" }
+        ]
+      },
+      "resourceEnvelope": {
+        "flashKB": { "min": 64, "max": 256 },
+        "ramKB": { "min": 32, "max": 128 },
+        "cpuMHz": { "min": 80, "recommended": 120 }
+      }
+    }
+  ],
+  "modelRuntimeProfiles": [
+    {
+      "id": "profile_default",
+      "featureSetId": "adaptive_reasoning_generic",
+      "targetId": "examplemcu123_lqfp",
+      "runtime": {
+        "executionClass": "MCU",
+        "scheduler": ["baremetal"],
+        "numeric": ["float32"]
+      },
+      "limits": {
+        "maxInputs": 16,
+        "maxOutputs": 4,
+        "maxParameters": 20000,
+        "maxLatencyUs": 5000
+      }
+    }
+  ],
+  "modelIoBindings": [
+    {
+      "id": "default_binding",
+      "targetId": "examplemcu123_lqfp",
+      "inputs": [
+        {
+          "name": "sensor_x",
+          "type": "float",
+          "source": {
+            "kind": "sensor",
+            "instance": "IMU0",
+            "interface": "I2C1",
+            "registerPath": "ACC_X"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "score",
+          "type": "float",
+          "sink": {
+            "kind": "firmware_var",
+            "symbol": "model.score"
+          }
+        }
+      ]
+    }
+  ],
+  "modelValidation": {
+    "requiredDocs": ["reference-manual"],
+    "requiredFields": ["device", "modelTargets", "modelFeatureSets"],
+    "requiredProjectFields": ["hardware.partNumber"],
+    "consistencyRules": [
+      "modelRuntimeProfiles.targetId in modelTargets.id",
+      "modelRuntimeProfiles.featureSetId in modelFeatureSets.id",
+      "modelIoBindings.targetId in modelTargets.id"
+    ]
+  }
 }

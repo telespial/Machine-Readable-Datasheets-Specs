@@ -38,6 +38,11 @@ MRD may describe:
 * electrical and functional constraints
 * errata and workarounds
 * traceability to source documentation
+* optional model-targeting feature sets and runtime constraints
+
+* * *
+
+Model extension details: [docs/model-feature-set.md](./docs/model-feature-set.md)
 
 * * *
 
@@ -60,6 +65,8 @@ MRD establishes a reusable hardware contract so that generators and reviewers ar
 
 MRD establishes what a device or pin can do.
 MRC establishes what that device or pin is actually connected to in a board design.
+
+MRD model-targeting extensions define what model feature sets are permitted on a specific hardware target.
 
 * * *
 
