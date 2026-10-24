@@ -1,3 +1,5 @@
+**Notice:** This repository is an archived, static proof-of-concept. It is no longer maintained, supported, or updated, and remains available solely as a historical reference.
+
 # Machine Readable Datasheet (MRD)
 
 [← Back to EmbeddedX-Specs (canonical index)](https://github.com/telespial/EmbeddedX-Specs)
